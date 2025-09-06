@@ -40,7 +40,7 @@ int isBinaryTree(const char* tree, int* errorFlag) {
 
 			pop(stack);
 		}
-		else if (isalpha((unsigned char)tree[i])) {
+		else if (isalpha((unsigned char)tree[i])) { // 트리 노드가 알파벳인 경우
 			if (isEmpty(stack)) {
 				*errorFlag = 1; // 괄호 외부에 노드가 존재하는 경우
 				destroyStack(stack);
