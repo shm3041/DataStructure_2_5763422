@@ -1,9 +1,8 @@
 ﻿// Stack을 이용한 이진트리 판별
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "stack/stack.h"
 
@@ -18,7 +17,12 @@ void eraseSpaceEol(char* str) {
 }
 
 // 이진트리 판별 (Stack만 사용, 재귀 없음)
-int isBinaryTree(const char* tree) {
+int isBinaryTree(const char* tree, int* errorFlag) {
+	if (tree == NULL || tree[0] == '\0') {
+		*errorFlag = 1; // 빈 문자열
+		return -1;
+	}
+
 	Stack* stack = createStack();
 	elementType childCount = 0;
 
@@ -28,9 +32,21 @@ int isBinaryTree(const char* tree) {
 			push(stack, childCount);
 		}
 		else if (tree[i] == ')') { // 부모 노드 종료
+			if (isEmpty(stack)) {
+				*errorFlag = 1; // 괄호 개수 초과
+				destroyStack(stack);
+				return -1;
+			}
+
 			pop(stack);
 		}
-		else {
+		else if (isalpha((unsigned char)tree[i])) {
+			if (isEmpty(stack)) {
+				*errorFlag = 1; // 괄호 외부에 노드가 존재하는 경우
+				destroyStack(stack);
+				return -1;
+			}
+
 			// stack에서 자식 개수를 가져온 후, 1증가
 			childCount = pop(stack);
 			childCount++;
@@ -45,11 +61,22 @@ int isBinaryTree(const char* tree) {
 			// stack에 다시 저장
 			push(stack, childCount);
 		}
+		else {
+			*errorFlag = 1; // 알파벳, '(', ')' 외의 문자가 존재
+			destroyStack(stack);
+			return -1;
+		}
 
 //#ifdef _DEBUG
 //		printf("tree[%d] = %c\n", i, tree[i]);
 //		printStack(stack);
 //#endif
+	}
+
+	if (!isEmpty(stack)) {
+		*errorFlag = 1; // 괄호 개수 부족
+		destroyStack(stack);
+		return -1;
 	}
 
 	destroyStack(stack);
@@ -60,16 +87,26 @@ int main() {
 	char tree[1000];
 
 	// 트리 입력받기
-	fgets(tree, sizeof(tree), stdin);
+	if (fgets(tree, sizeof(tree), stdin) == NULL) {
+		printf("ERROR\n");
+		return 0;
+	}
+
 	// 공백, 개행문자 제거
 	eraseSpaceEol(tree);
 
+	// 이진트리 여부 확인
+	int errorFlag = 0;
+	int result = isBinaryTree(tree, &errorFlag);
+	
 //#ifdef _DEBUG
 //	printf("input: %s\n", tree);
 //#endif
 
 	// 이진트리 여부 출력
-	printf("%s\n", isBinaryTree(tree) == 0 ? "TRUE" : "FALSE");
+	//printf("%s\n", isBinaryTree(tree) == 0 ? "TRUE" : "FALSE");
+	if (errorFlag) printf("ERROR\n");
+	else printf("%s\n", result == 0 ? "TRUE" : "FALSE");
 
 	return 0;
 }
