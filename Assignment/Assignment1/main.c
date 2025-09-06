@@ -104,7 +104,6 @@ int main() {
 //#endif
 
 	// 이진트리 여부 출력
-	//printf("%s\n", isBinaryTree(tree) == 0 ? "TRUE" : "FALSE");
 	if (errorFlag) printf("ERROR\n");
 	else printf("%s\n", result == 0 ? "TRUE" : "FALSE");
 
