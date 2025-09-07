@@ -16,7 +16,7 @@ void eraseSpaceEol(char* str) {
 	*dst = '\0';
 }
 
-// 이진트리 판별 (Stack만 사용, 재귀 없음)
+// 이진트리 판별
 int isBinaryTree(const char* tree, int* BinarytreeFlag) {
 	if (tree == NULL || tree[0] == '\0') { // 빈 문자열
 		return -1;
