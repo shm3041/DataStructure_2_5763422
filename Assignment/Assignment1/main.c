@@ -17,9 +17,8 @@ void eraseSpaceEol(char* str) {
 }
 
 // 이진트리 판별 (Stack만 사용, 재귀 없음)
-int isBinaryTree(const char* tree, int* errorFlag) {
-	if (tree == NULL || tree[0] == '\0') {
-		*errorFlag = 1; // 빈 문자열
+int isBinaryTree(const char* tree, int* BinarytreeFlag) {
+	if (tree == NULL || tree[0] == '\0') { // 빈 문자열
 		return -1;
 	}
 
@@ -32,8 +31,7 @@ int isBinaryTree(const char* tree, int* errorFlag) {
 			push(stack, childCount);
 		}
 		else if (tree[i] == ')') { // 부모 노드 종료
-			if (isEmpty(stack)) {
-				*errorFlag = 1; // 괄호 개수 초과
+			if (isEmpty(stack)) { // 괄호 개수 초과
 				destroyStack(stack);
 				return -1;
 			}
@@ -41,8 +39,7 @@ int isBinaryTree(const char* tree, int* errorFlag) {
 			pop(stack);
 		}
 		else if (isalpha((unsigned char)tree[i])) { // 트리 노드가 알파벳인 경우
-			if (isEmpty(stack)) {
-				*errorFlag = 1; // 괄호 외부에 노드가 존재하는 경우
+			if (isEmpty(stack)) { // 괄호 외부에 노드가 존재하는 경우
 				destroyStack(stack);
 				return -1;
 			}
@@ -53,16 +50,16 @@ int isBinaryTree(const char* tree, int* errorFlag) {
 
 			// 이 값이 2보다 클 경우 이진트리가 아님
 			if (childCount > 2) {
-				destroyStack(stack);
-				return -1;
+				//destroyStack(stack);
+				//return 2;
+				*BinarytreeFlag = 1;
 			}
 
 			// 만약 작거나 같을 시 이진트리 조건에 부합하므로 childCout를
 			// stack에 다시 저장
 			push(stack, childCount);
 		}
-		else {
-			*errorFlag = 1; // 알파벳, '(', ')' 외의 문자가 존재
+		else { // 알파벳, '(', ')' 외의 문자가 존재
 			destroyStack(stack);
 			return -1;
 		}
@@ -73,8 +70,7 @@ int isBinaryTree(const char* tree, int* errorFlag) {
 //#endif
 	}
 
-	if (!isEmpty(stack)) {
-		*errorFlag = 1; // 괄호 개수 부족
+	if (!isEmpty(stack)) { // 괄호 개수 부족
 		destroyStack(stack);
 		return -1;
 	}
@@ -96,16 +92,18 @@ int main() {
 	eraseSpaceEol(tree);
 
 	// 이진트리 여부 확인
-	int errorFlag = 0;
-	int result = isBinaryTree(tree, &errorFlag);
+	int BinarytreeFlag = 0;
+	int result = isBinaryTree(tree, &BinarytreeFlag);
 	
 //#ifdef _DEBUG
 //	printf("input: %s\n", tree);
 //#endif
 
 	// 이진트리 여부 출력
-	if (errorFlag) printf("ERROR\n");
-	else printf("%s\n", result == 0 ? "TRUE" : "FALSE");
+	printf("%d, %d\n", BinarytreeFlag, result);
+	if (result) printf("ERROR\n");
+	else if (BinarytreeFlag) printf("FALSE\n");
+	else printf("TRUE\n");
 
 	return 0;
 }

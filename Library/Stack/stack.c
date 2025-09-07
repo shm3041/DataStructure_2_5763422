@@ -56,7 +56,7 @@ elementType pop(Stack* stack) {
 	StackNode* temp = stack->top;
 	elementType item = temp->data;
 
-	stack->top = stack->top->link;
+	stack->top = temp->link;
 
 	free(temp);
 	return item;
