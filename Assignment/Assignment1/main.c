@@ -97,10 +97,10 @@ int main() {
 	
 //#ifdef _DEBUG
 //	printf("input: %s\n", tree);
+// 	printf("%d, %d\n", BinarytreeFlag, result);
 //#endif
 
 	// 이진트리 여부 출력
-	printf("%d, %d\n", BinarytreeFlag, result);
 	if (result) printf("ERROR\n");
 	else if (BinarytreeFlag) printf("FALSE\n");
 	else printf("TRUE\n");
