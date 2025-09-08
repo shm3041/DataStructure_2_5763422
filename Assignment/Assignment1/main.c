@@ -16,20 +16,25 @@ void eraseSpaceEol(char* str) {
 	*dst = '\0';
 }
 
+/*
+ 1. 시작은 (
+ 2. 입력에 무조건 영어가 있어야 함
+ 3. 끝은 )
+ 4. 끝 뒤에 무언가 있다면 안됨
+ 5 괄호 (, )의 개수가 동일해야 함
+*/
+
 // 이진트리 판별
 int isBinaryTree(const char* tree, int* BinarytreeFlag) {
-	if (tree == NULL || tree[0] == '\0') { // 빈 문자열
-		return -1;
-	}
+	if (tree == NULL || tree[0] == '\0') return -1; // 빈 문자열
+
+	if (tree[0] != '(') return -1; // 괄호 시작 X
 
 	Stack* stack = createStack();
-	elementType childCount = 0;
-
+	int alphaFlag = 0;
 	for (int i = 0; tree[i] != '\0'; ++i) {
-		if (tree[i] == '(') { // 부모 노드 시작
-			childCount = 0;
-			push(stack, childCount);
-		}
+		if (tree[i] == '(') push(stack, 0); // 부모 노드 시작
+
 		else if (tree[i] == ')') { // 부모 노드 종료
 			if (isEmpty(stack)) { // 괄호 개수 초과
 				destroyStack(stack);
@@ -44,15 +49,17 @@ int isBinaryTree(const char* tree, int* BinarytreeFlag) {
 				return -1;
 			}
 
+			alphaFlag = 1; // 노드 존재여부 확인
+
 			// stack에서 자식 개수를 가져온 후, 1증가
-			childCount = pop(stack);
+			elementType childCount = pop(stack);
 			childCount++;
 
 			// 이 값이 2보다 클 경우 이진트리가 아님
 			if (childCount > 2) {
 				//destroyStack(stack);
 				//return 2;
-				*BinarytreeFlag = 1;
+				*BinarytreeFlag = 0;
 			}
 
 			// 만약 작거나 같을 시 이진트리 조건에 부합하므로 childCout를
@@ -75,6 +82,11 @@ int isBinaryTree(const char* tree, int* BinarytreeFlag) {
 		return -1;
 	}
 
+	if (!alphaFlag) { // 노드가 존재하지 않음
+		destroyStack(stack);
+		return -1;
+	}
+
 	destroyStack(stack);
 	return 0;
 }
@@ -92,7 +104,7 @@ int main() {
 	eraseSpaceEol(tree);
 
 	// 이진트리 여부 확인
-	int BinarytreeFlag = 0;
+	int BinarytreeFlag = 1;
 	int result = isBinaryTree(tree, &BinarytreeFlag);
 	
 //#ifdef _DEBUG
@@ -102,7 +114,7 @@ int main() {
 
 	// 이진트리 여부 출력
 	if (result) printf("ERROR\n");
-	else if (BinarytreeFlag) printf("FALSE\n");
+	else if (!BinarytreeFlag) printf("FALSE\n");
 	else printf("TRUE\n");
 
 	return 0;
