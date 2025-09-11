@@ -3,10 +3,10 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "tree.h"
+#include "linkedTree.h"
 #include "../stack/stack.h"
 
-Tree* createTree(void) {
+Tree* createLinkedTree(void) {
 	Tree* tree;
 	tree = (Tree*)malloc(sizeof(Tree));
 	tree->node = NULL;
@@ -15,15 +15,17 @@ Tree* createTree(void) {
 }
 
 void destroyTree(Tree* tree) {
-	if (isEmpty(tree)) free(tree);
+	if (isEmptyTree(tree)) free(tree);
 }
 
-Tree* makeTree(const char* tree) {
+Tree* makeLinkedTree(const char* tree) {
+	if (isBinaryTree(tree)) return -1; // 이진트리 X
 	
+
 }
 
 
-int isEmpty(Tree* tree) {
+int isEmptyTree(Tree* tree) {
 	if (tree == NULL) return 1; // true
 	else return 0; // false
 }
@@ -39,7 +41,7 @@ void eraseSpaceEol(char* str) {
 }
 
 // 이진트리 판별
-int isBinaryTree(char* tree, int* BinarytreeFlag) {
+int isBinaryTree(char* tree) {
 	eraseSpaceEol(tree);
 
 	if (tree == NULL || tree[0] == '\0') return -1; // 빈 문자열
@@ -48,12 +50,13 @@ int isBinaryTree(char* tree, int* BinarytreeFlag) {
 
 	Stack* stack = createStack();
 	int rootCount = 0;
-	int alphaFlag = 0;
+	int alphaFlag = 0, binaryTreeFlag = 1;
+
 	for (int i = 0; tree[i] != '\0'; ++i) {
 		if (tree[i] == '(') push(stack, 0); // 부모 노드 시작
 
 		else if (tree[i] == ')') { // 부모 노드 종료
-			if (isEmpty(stack)) { // 괄호 개수 초과
+			if (isEmptyTree(stack)) { // 괄호 개수 초과
 				destroyStack(stack);
 				return -1;
 			}
@@ -61,7 +64,8 @@ int isBinaryTree(char* tree, int* BinarytreeFlag) {
 			pop(stack);
 		}
 		else if (isalpha((unsigned char)tree[i])) { // 트리 노드가 알파벳인 경우
-			if (isEmpty(stack)) { // 괄호 외부에 노드가 존재하는 경우
+			if (isEmptyTree(stack)) { // 괄호 외부에 노드가 존재하는 경우
+				rootCount++;
 				destroyStack(stack);
 				return -1;
 			}
@@ -74,7 +78,7 @@ int isBinaryTree(char* tree, int* BinarytreeFlag) {
 
 			// 이 값이 2보다 클 경우 이진트리가 아님
 			if (childCount > 2) {
-				*BinarytreeFlag = 0;
+				binaryTreeFlag = 0;
 			}
 
 			// 만약 작거나 같을 시 이진트리 조건에 부합하므로 childCout를
@@ -87,12 +91,17 @@ int isBinaryTree(char* tree, int* BinarytreeFlag) {
 		}
 	}
 
-	if (!isEmpty(stack)) { // 괄호 개수 부족
+	if (!isEmptyTree(stack)) { // 괄호 개수 부족
 		destroyStack(stack);
 		return -1;
 	}
 
 	if (!alphaFlag) { // 노드가 존재하지 않음
+		destroyStack(stack);
+		return -1;
+	}
+
+	if (rootCount != 1) {
 		destroyStack(stack);
 		return -1;
 	}

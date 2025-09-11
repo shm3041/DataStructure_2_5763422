@@ -16,11 +16,13 @@ typedef struct Tree {
 // CRUD-PI
 
 //Create, Destroy
-extern Tree* createTree(void);
+extern Tree* createLinkedTree(void);
 extern void destroyTree(Tree* tree);
 
 // Update, Read
-extern Tree* makeTree(const char* tree);
+extern Tree* makeLinkedTree(const char* tree);
+
+
 extern Node* getRoot(Tree* tree);
 extern Node* getleftChild(Tree* tree);
 extern Node* getrightChild(Tree* tree);
@@ -30,6 +32,8 @@ extern void printTree(Tree* tree);
 extern void initTree(Tree* tree);
 
 
-extern int isEmpty(Tree* tree);
+extern int isEmptyTree(Tree* tree);
 
 extern void traversal(Tree* tree, const char* order); // ¼øÈ¸
+
+extern int isBinaryTree(char* tree);
