@@ -31,14 +31,13 @@ int isBinaryTree(const char* tree) {
 			elementType childCount = pop(stack);
 			++childCount;
 
-			// 이 값이 2보다 클 경우 이진트리가 아님
+			// 자식이 2개 이상이라면 이진트리x
 			if (childCount > 2) {
 				destroyStack(stack);
 				return FALSE;
 			}
 
-			// 만약 작거나 같을 시 이진트리 조건에 부합하므로 childCout를
-			// stack에 다시 저장
+			// 자식이 2개 이하라면 다시 Stack에 저장
 			push(stack, childCount);
 		}
 //#ifdef _DEBUG
@@ -55,22 +54,20 @@ int isBinaryTreeRec(const char* tree, int* index) {
 	int childCount = 0;
 
 	while (tree[*index] != '\0') {
-		if (tree[*index] == '(') {
+		if (tree[*index] == '(') { // 부모 노드 시작
 			++(*index);
-			if (!isBinaryTreeRec(tree, index)) return FALSE; // 하위 트리 검사
+			if (!isBinaryTreeRec(tree, index)) return FALSE; // 자식 노드가 2개 이상일 시 FALSE
 		}
-		else if (tree[*index] == ')') {
+		else if (tree[*index] == ')') { // 부모 노드 끝
 			++(*index);
-			return (childCount <= 2) ? TRUE : FALSE;
+			return (childCount <= 2) ? TRUE : FALSE; // 자식 노드가 2개 이하라면 TRUE, 아니라면 FALSE
 		}
 		else {
 			++(*index);
-			++childCount;
+			++childCount; // 노드가 존재할 경우 증가
 		}
-		//if (childCount > 2) return FALSE;
 	}
-
-	return (childCount <= 2) ? TRUE : FALSE;
+	return TRUE; // 이진트리가 아니라면 TRUE
 }
 
 int main() {
