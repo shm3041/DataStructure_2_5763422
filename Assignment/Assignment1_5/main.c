@@ -1,4 +1,5 @@
-﻿// Stack을 이용한 이진트리 판별
+﻿// 1. Stack을 이용한 이진트리 판별
+// 2. 재귀함수를 이용한 이진트리 판별
 
 #include <stdio.h>
 #include <string.h>
