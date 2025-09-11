@@ -56,7 +56,6 @@ int isBinaryTreeRec(const char* tree, int* index) {
 
 	while (tree[*index] != '\0') {
 		if (tree[*index] == '(') { // 부모 노드 시작
-			//childCount = 0; // 디버깅용
 			printf("tree[%d] = %c\n", *index, tree[*index]);
 
 			++(*index);
