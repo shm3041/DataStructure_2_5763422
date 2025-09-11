@@ -56,17 +56,26 @@ int isBinaryTreeRec(const char* tree, int* index) {
 
 	while (tree[*index] != '\0') {
 		if (tree[*index] == '(') { // 부모 노드 시작
+			//childCount = 0; // 디버깅용
+			printf("tree[%d] = %c\n", *index, tree[*index]);
+
 			++(*index);
 			if (!isBinaryTreeRec(tree, index)) return FALSE; // 자식 노드가 2개 이상일 시 FALSE
 		}
 		else if (tree[*index] == ')') { // 부모 노드 끝
+			printf("tree[%d] = %c\n", *index, tree[*index]);
+
 			++(*index);
 			return (childCount <= 2) ? TRUE : FALSE; // 자식 노드가 2개 이하라면 TRUE, 아니라면 FALSE
 		}
 		else {
+			printf("tree[%d] = %c, childCount = %d\n",
+				*index, tree[*index], childCount + 1);
+
 			++(*index);
 			++childCount; // 노드가 존재할 경우 증가
 		}
+		if (childCount > 2) return FALSE;
 	}
 	return TRUE; // 이진트리가 아니라면 TRUE
 }
