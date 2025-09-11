@@ -2,8 +2,6 @@
 // 2. 재귀함수를 이용한 이진트리 판별
 
 #include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 
 #include "stack/stack.h"
 
