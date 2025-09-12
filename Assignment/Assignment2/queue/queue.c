@@ -22,7 +22,7 @@ void destroyQueue(Queue* queue) {
 }
 
 void enQueue(Queue* queue, elementType data) {
-	// 데이터 삽입
+	// 큐에 데이터 삽입
 	// rear로 삽입, front로 추출
 	QueueNode* newNode = (QueueNode*)malloc(sizeof(QueueNode));
 
@@ -30,12 +30,12 @@ void enQueue(Queue* queue, elementType data) {
 	newNode->link = NULL;
 	++(queue->follow);
 
+	// 새로운 노드와 기존 Queue를 연결
 	if (isEmptyQueue(queue)) {
 		queue->rear = newNode;
 		queue->front = newNode;
 	}
 	else {
-		// front방향에서 rear을 가리키는 구조
 		queue->rear->link = newNode;
 		queue->rear = newNode;
 	}
@@ -43,14 +43,14 @@ void enQueue(Queue* queue, elementType data) {
 }
 
 elementType deQueue(Queue* queue) {
-	// 데이터 추출
+	// 큐에서 데이터 추출
 	if (isEmptyQueue(queue)) {
 		printf("Queue Empty!\n");
 		return 0;
 	}
 
-	QueueNode* frontNode = queue->front;
-	elementType data = frontNode->data;
+	QueueNode* frontNode = queue->front; // 삭제할 노드
+	elementType data = frontNode->data; // 추출할 값
 
 	queue->front = queue->front->link;
 	--(queue->follow);
@@ -60,6 +60,7 @@ elementType deQueue(Queue* queue) {
 }
 
 void printQueue(Queue* queue) {
+	// 큐에 있는 데이터를 모두 출력
 	if (isEmptyQueue(queue)) {
 		printf("Queue Empty!\n");
 		return;
@@ -74,6 +75,7 @@ void printQueue(Queue* queue) {
 }
 
 void initQueue(Queue* queue) {
+	// 큐에 있는 데이터를 모두 삭제
 	if (isEmptyQueue(queue)) return;
 
 	while (queue->front != NULL) {
