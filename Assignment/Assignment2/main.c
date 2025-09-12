@@ -1,4 +1,4 @@
-﻿// Stack을 이용한 이진트리 판별
+﻿// 이진트리의 높이, 노드 수, 단말 노드의 수를 출력
 
 #include <stdio.h>
 
@@ -8,24 +8,11 @@ int main() {
 	char input[1000];
 
 	// 트리 입력받기
-	if (fgets(input, sizeof(input), stdin) == NULL) {
-		printf("ERROR\n");
-		return 0;
-	}
+	fgets(input, sizeof(input), stdin);
 
 	Tree* tree;
 	tree = createLinkedTree();
 	makeLinkedTree(input);
-	// makeArrayTree(input);
-	 
-	 
-	
-	//int result = isBinaryTree(tree, &BinarytreeFlag);
-
-	// 이진트리 여부 출력
-	if (result) printf("ERROR\n");
-	else if (!BinarytreeFlag) printf("FALSE\n");
-	else printf("TRUE\n");
 
 	return 0;
 }

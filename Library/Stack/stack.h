@@ -25,7 +25,7 @@ extern void initStack(Stack* stack);
 extern void push(Stack* stack, elementType item);
 extern elementType pop(Stack* stack);
 
-extern int isEmpty(Stack* stack);
+extern int isEmptyStack(Stack* stack);
 //extern int isFull();
 
 extern void printStack(Stack* stack);

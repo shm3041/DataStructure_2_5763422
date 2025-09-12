@@ -125,11 +125,13 @@
   <ItemGroup>
     <ClCompile Include="linkedTree\linkedTree.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="queue\queue.c" />
     <ClCompile Include="stack\stack.c" />
     <ClCompile Include="tree\tree.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="linkedTree\linkedTree.h" />
+    <ClInclude Include="queue\queue.h" />
     <ClInclude Include="stack\stack.h" />
     <ClInclude Include="tree\tree.h" />
   </ItemGroup>
