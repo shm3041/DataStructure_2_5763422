@@ -89,7 +89,7 @@ int main() {
 	// 이진트리 여부 출력
 	int index = 0;
 	printf((isBinaryTree(tree) == TRUE) ? "TRUE\n" : "FALSE\n");
-	printf((isBinaryTreeRec(tree, &index) == TRUE) ? "TRUE\n" : "FALSE\n");
+	//printf((isBinaryTreeRec(tree, &index) == TRUE) ? "TRUE\n" : "FALSE\n");
 
 	return 0;
 }
