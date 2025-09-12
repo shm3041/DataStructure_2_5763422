@@ -35,7 +35,7 @@ void enQueue(Queue* queue, elementType data) {
 		queue->front = newNode;
 	}
 	else {
-		// front방향에서 rear을 가리키는 구조
+		// front방향에서 rear방향을 가리키는 구조
 		queue->rear->link = newNode;
 		queue->rear = newNode;
 	}
@@ -60,6 +60,7 @@ elementType deQueue(Queue* queue) {
 }
 
 void printQueue(Queue* queue) {
+	// 큐에 있는 데이터를 모두 출력
 	if (isEmptyQueue(queue)) {
 		printf("Queue Empty!\n");
 		return;
@@ -74,6 +75,7 @@ void printQueue(Queue* queue) {
 }
 
 void initQueue(Queue* queue) {
+	// 큐에 있는 데이터를 모두 삭제
 	if (isEmptyQueue(queue)) return;
 
 	while (queue->front != NULL) {
