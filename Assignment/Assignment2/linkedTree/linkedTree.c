@@ -1,111 +1,60 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-
 #include "linkedTree.h"
-#include "../stack/stack.h"
 
-Tree* createLinkedTree(void) {
-	Tree* tree;
-	tree = (Tree*)malloc(sizeof(Tree));
-	tree->node = NULL;
-
-	return tree;
+TreeNode* createNode(char data) {
+    TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
+    node->data = data;
+    node->leftChild = NULL;
+    node->rightSibling = NULL;
+    return node;
 }
 
-void destroyTree(Tree* tree) {
-	if (isEmptyTree(tree)) free(tree);
+void addChild(TreeNode* parent, TreeNode* child) {
+    if (!parent || !child) return;
+    if (!parent->leftChild)
+        parent->leftChild = child;
+    else {
+        TreeNode* curr = parent->leftChild;
+        while (curr->rightSibling)
+            curr = curr->rightSibling;
+        curr->rightSibling = child;
+    }
 }
 
-Tree* makeLinkedTree(const char* tree) {
-	if (isBinaryTree(tree)) return -1; // 이진트리 X
-	
-
+int getHeight(TreeNode* root) {
+    if (!root) return -1;
+    int maxH = -1;
+    for (TreeNode* c = root->leftChild; c; c = c->rightSibling) {
+        int h = getHeight(c);
+        if (h > maxH) maxH = h;
+    }
+    return maxH + 1;
 }
 
-
-int isEmptyTree(Tree* tree) {
-	if (tree == NULL) return 1; // true
-	else return 0; // false
+int getNodeCount(TreeNode* root) {
+    if (!root) return 0;
+    int cnt = 1;
+    for (TreeNode* c = root->leftChild; c; c = c->rightSibling)
+        cnt += getNodeCount(c);
+    return cnt;
 }
 
-void eraseSpaceEol(char* str) {
-	char* src = str;
-	char* dst = str;
-	while (*src) {
-		if (*src != ' ' && *src != '\n') *dst++ = *src;
-		++src;
-	}
-	*dst = '\0';
+int getLeafCount(TreeNode* root) {
+    if (!root) return 0;
+    if (!root->leftChild) return 1;
+    int cnt = 0;
+    for (TreeNode* c = root->leftChild; c; c = c->rightSibling)
+        cnt += getLeafCount(c);
+    return cnt;
 }
 
-// 이진트리 판별
-int isBinaryTree(char* tree) {
-	eraseSpaceEol(tree);
-
-	if (tree == NULL || tree[0] == '\0') return -1; // 빈 문자열
-
-	if (tree[0] != '(') return -1; // 괄호 시작 X
-
-	Stack* stack = createStack();
-	int rootCount = 0;
-	int alphaFlag = 0, binaryTreeFlag = 1;
-
-	for (int i = 0; tree[i] != '\0'; ++i) {
-		if (tree[i] == '(') push(stack, 0); // 부모 노드 시작
-
-		else if (tree[i] == ')') { // 부모 노드 종료
-			if (isEmptyTree(stack)) { // 괄호 개수 초과
-				destroyStack(stack);
-				return -1;
-			}
-
-			pop(stack);
-		}
-		else if (isalpha((unsigned char)tree[i])) { // 트리 노드가 알파벳인 경우
-			if (isEmptyTree(stack)) { // 괄호 외부에 노드가 존재하는 경우
-				rootCount++;
-				destroyStack(stack);
-				return -1;
-			}
-
-			alphaFlag = 1; // 노드 존재여부 확인
-
-			// stack에서 자식 개수를 가져온 후, 1증가
-			elementType childCount = pop(stack);
-			childCount++;
-
-			// 이 값이 2보다 클 경우 이진트리가 아님
-			if (childCount > 2) {
-				binaryTreeFlag = 0;
-			}
-
-			// 만약 작거나 같을 시 이진트리 조건에 부합하므로 childCout를
-			// stack에 다시 저장
-			push(stack, childCount);
-		}
-		else { // 알파벳, '(', ')' 외의 문자가 존재
-			destroyStack(stack);
-			return -1;
-		}
-	}
-
-	if (!isEmptyTree(stack)) { // 괄호 개수 부족
-		destroyStack(stack);
-		return -1;
-	}
-
-	if (!alphaFlag) { // 노드가 존재하지 않음
-		destroyStack(stack);
-		return -1;
-	}
-
-	if (rootCount != 1) {
-		destroyStack(stack);
-		return -1;
-	}
-
-	destroyStack(stack);
-	return 0;
+void deleteTree(TreeNode* root) {
+    if (!root) return;
+    TreeNode* c = root->leftChild;
+    while (c) {
+        TreeNode* next = c->rightSibling;
+        deleteTree(c);
+        c = next;
+    }
+    free(root);
 }

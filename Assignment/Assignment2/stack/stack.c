@@ -49,8 +49,8 @@ elementType pop(Stack* stack) {
 	// 만약 스택이 비어있지 않다면 top이 가리키는 블록을 삭제,
 	// 아래 블록을 top으로 변경, pop한 데이터 반환
 	if (isEmptyStack(stack)) {
-		//printf("Stack is empty\n");
-		return -1;
+		printf("Stack is empty\n");
+		return NULL;
 	}
 
 	StackNode* temp = stack->top;
@@ -79,7 +79,7 @@ void printStack(Stack* stack) {
 
 	printf("Stack: ");
 	while (node != NULL) {
-		printf("%d ", node->data);
+		printf("%s ", node->data);
 		node = node->link;
 	}
 	printf("\n");

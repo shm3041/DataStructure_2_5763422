@@ -1,39 +1,14 @@
 #pragma once
 
-typedef int elementType;
+typedef struct TreeNode {
+    char data;
+    struct TreeNode* leftChild;
+    struct TreeNode* rightSibling;
+} TreeNode;
 
-typedef struct Node {
-	elementType data;
-	Node*leftNode, *rightNode;
-} Node;
-
-typedef struct Tree {
-	Node* node;
-} Tree;
-
-//typedef int* array;
-
-// CRUD-PI
-
-//Create, Destroy
-extern Tree* createLinkedTree(void);
-extern void destroyTree(Tree* tree);
-
-// Update, Read
-extern Tree* makeLinkedTree(const char* tree);
-
-
-extern Node* getRoot(Tree* tree);
-extern Node* getleftChild(Tree* tree);
-extern Node* getrightChild(Tree* tree);
-
-// Print, Init
-extern void printTree(Tree* tree);
-extern void initTree(Tree* tree);
-
-
-extern int isEmptyTree(Tree* tree);
-
-extern void traversal(Tree* tree, const char* order); // ¼øÈ¸
-
-extern int isBinaryTree(char* tree);
+extern TreeNode* createNode(char data);
+extern void addChild(TreeNode* parent, TreeNode* child);
+extern int getHeight(TreeNode* root);
+extern int getNodeCount(TreeNode* root);
+extern int getLeafCount(TreeNode* root);
+extern void deleteTree(TreeNode* root);
