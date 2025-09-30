@@ -135,17 +135,17 @@ int main(void) {
     static char tree[MAX_TREE] = { 0 };
     char input[1024];
 
-    printf("괄호표기 트리 입력: ");
+    //printf("괄호표기 트리 입력: ");
     fgets(input, sizeof(input), stdin);
 
     if (parseToHeap(input, tree, MAX_TREE) == 0) {
-        for (int i = 1; i < 512; ++i) {
+        /*for (int i = 1; i < 512; ++i) {
             if (tree[i]) {
                 printf("[%d] = %c\n", i, tree[i]);
             }
-        }
+        }*/
 
-        printf("\npre-order: ");
+        printf("pre-order: ");
         preorder(tree, 1, MAX_TREE);
 
         printf("\nin-order: ");
