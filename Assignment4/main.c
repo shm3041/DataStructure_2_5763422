@@ -2,147 +2,95 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <windows.h>
 
-#define MAX_DATA 100
+// 노드 구조체 정의
+typedef struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+} Node;
 
-/* -------------------- BST 연결 자료형 구현 -------------------- */
-typedef struct BSTNode {
-    int key;
-    struct BSTNode* left;
-    struct BSTNode* right;
-} BSTNode;
-
-BSTNode* bst_root = NULL;
-
-BSTNode* createNode(int key) {
-    BSTNode* node = (BSTNode*)malloc(sizeof(BSTNode));
-    node->key = key;
-    node->left = node->right = NULL;
-    return node;
+// 새 노드 생성
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+    return newNode;
 }
 
-void bst_insert(BSTNode** root, int key) {
-    if (*root == NULL) {
-        *root = createNode(key);
-        return;
-    }
-    if (key < (*root)->key)
-        bst_insert(&(*root)->left, key);
-    else if (key > (*root)->key)
-        bst_insert(&(*root)->right, key);
-    // 중복은 무시
+// 이진탐색트리에 삽입
+Node* insert(Node* root, int data) {
+    if (root == NULL) return createNode(data);
+    if (data < root->data)
+        root->left = insert(root->left, data);
+    else
+        root->right = insert(root->right, data);
+    return root;
 }
 
-int bst_search(BSTNode* root, int key, int* count) {
-    if (root == NULL) return -1;
+// 트리에서 탐색
+int searchBST(Node* root, int key, int* count) {
     (*count)++;
-    if (root->key == key) return 1;
-    else if (key < root->key) return bst_search(root->left, key, count);
-    else return bst_search(root->right, key, count);
+    if (root == NULL) return 0;
+    if (root->data == key) return 1;
+    if (key < root->data) return searchBST(root->left, key, count);
+    else return searchBST(root->right, key, count);
 }
 
-/* -------------------- 일반 이진 트리 (배열 기반, 부모-왼쪽 idx*2, 오른쪽 idx*2+1) -------------------- */
-#define MAX_TREE 2048
-#define MAX_STACK 512
-
-typedef struct {
-    int data[MAX_STACK];
-    int top;
-} IntStack;
-
-void initStack(IntStack* s) { s->top = -1; }
-int isEmpty(IntStack* s) { return s->top == -1; }
-void push(IntStack* s, int v) { s->data[++s->top] = v; }
-int pop(IntStack* s) { return isEmpty(s) ? -1 : s->data[s->top--]; }
-int peek(IntStack* s) { return isEmpty(s) ? -1 : s->data[s->top]; }
-
-int parseToHeap(const char* in, char tree[], int size) {
-    IntStack st; initStack(&st);
-    int lastIdx = 0;
-    int childFlag = 0; // 0=왼쪽, 1=오른쪽
-
-    for (int i = 0; in[i]; ++i) {
-        char c = in[i];
-        if (isspace((unsigned char)c)) continue;
-
-        if (c == '(') {
-            if (lastIdx != 0) {
-                push(&st, lastIdx);
-                childFlag = 0;
-            }
-            lastIdx = 0;
-        }
-        else if (c == ')') {
-            pop(&st);
-            lastIdx = 0;
-        }
-        else if (isupper((unsigned char)c)) {
-            int idx;
-            if (isEmpty(&st)) idx = 1; // root
-            else {
-                int parent = peek(&st);
-                idx = (childFlag == 0) ? parent * 2 : parent * 2 + 1;
-            }
-            if (idx >= size) {
-                fprintf(stderr, "배열 초과!\n");
-                return -1;
-            }
-            tree[idx] = c;
-            lastIdx = idx;
-            childFlag = 1; // 같은 부모 밑의 다음 노드는 오른쪽
-        }
-    }
-    return 0;
+// 마이크로초 단위 시간 반환
+double get_time_microseconds() {
+    LARGE_INTEGER freq, counter;
+    QueryPerformanceFrequency(&freq);
+    QueryPerformanceCounter(&counter);
+    return (double)counter.QuadPart * 1e6 / freq.QuadPart;
 }
 
-int bt_search(int* tree, int target, int* count_bt) {
-    for (int i = 0; i < MAX_TREE; ++i) {
-        (*count_bt)++;
-        if (tree[i] == target) return target;
-    }
-}
-
-/* -------------------- main -------------------- */
 int main() {
+    int arr[100];
+    Node* root = NULL;
     srand((unsigned)time(NULL));
 
-    int nums[MAX_DATA];
-
-    // 동일한 난수 100개 생성 및 두 트리에 삽입
-    for (int i = 0; i < MAX_DATA; i++) {
-        nums[i] = rand() % 1001; // 0~1000
-        bst_insert(&bst_root, nums[i]);
+    // 0~1000 사이 난수 100개 생성 및 배열 저장
+    for (int i = 0; i < 100; i++) {
+        arr[i] = rand() % 1001;
+        root = insert(root, arr[i]);  // 트리에도 삽입
+		printf("%d ", arr[i]);
     }
 
-    static int tree[MAX_TREE] = { 0 };
-    parseToHeap(nums, tree, MAX_TREE);
-
-
-    // 출력 확인
-    printf("생성된 난수 100개:\n");
-    for (int i = 0; i < MAX_DATA; i++) {
-        printf("%d ", nums[i]);
-    }
-    printf("\n\n");
+    printf("\n");
 
     int target;
-    printf("찾을 숫자 입력: ");
+    printf("검색할 값을 입력하세요: ");
     scanf("%d", &target);
 
-    int count_bst = 0, count_bt = 0;
-    int bst_found = bst_search(bst_root, target, &count_bst);
-    int bt_found = bt_search(tree, target, &count_bt);
+    // ===== 배열 선형 탐색 =====
+    double start1 = get_time_microseconds();
+    int found1 = 0;
+    int linearCount = 0;
+    for (int i = 0; i < 100; i++) {
+        linearCount++;
+        if (arr[i] == target) {
+            found1 = 1;
+            break;
+        }
+    }
+    double end1 = get_time_microseconds();
+
+    // ===== 트리 탐색 =====
+    double start2 = get_time_microseconds();
+    int bstCount = 0;
+    int found2 = searchBST(root, target, &bstCount);
+    double end2 = get_time_microseconds();
+
+    double timeLinear = end1 - start1;
+    double timeBST = end2 - start2;
 
     printf("\n[탐색 결과]\n");
-    if (bst_found != -1)
-        printf("BST   : %d 찾음 (탐색 횟수: %d)\n", target, count_bst);
-    else
-        printf("BST   : %d 없음 (탐색 횟수: %d)\n", target, count_bst);
-
-    if (bt_found != -1)
-        printf("Binary: %d 찾음 (탐색 횟수: %d, 위치: %d)\n", target, count_bt, bt_found);
-    else
-        printf("Binary: %d 없음 (탐색 횟수: %d)\n", target, count_bt);
+    printf("배열 선형 탐색: %s (비교 횟수: %d, 소요 시간: %.10f μs)\n",
+        found1 ? "찾음" : "없음", linearCount, timeLinear);
+    printf("이진탐색트리 탐색: %s (비교 횟수: %d, 소요 시간: %.10f μs)\n",
+        found2 ? "찾음" : "없음", bstCount, timeBST);
 
     return 0;
 }
