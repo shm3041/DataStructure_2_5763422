@@ -29,7 +29,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClassContent3", "ClassConte
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Assignment3", "Assignment\Assignment3\Assignment3.vcxproj", "{47F34D1C-D76D-485B-BE3D-DAF32AE40536}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Assignment4", "Assignment4\Assignment4.vcxproj", "{4B69EF8B-124F-4A2D-9997-2C1E8603EA5C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Assignment4", "Assignment\Assignment4\Assignment4.vcxproj", "{4B69EF8B-124F-4A2D-9997-2C1E8603EA5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
