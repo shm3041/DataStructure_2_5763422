@@ -16,7 +16,7 @@
    설정
    ========================= */
 #define CSV_PATH "dataset_id_ascending.csv"
-#define RUNS 10            /* 과제 요구: 1000 */
+#define RUNS 1000            /* 과제 요구: 1000 */
 #define NAME_MAX 64
 
    /* =========================
